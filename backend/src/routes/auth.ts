@@ -24,7 +24,7 @@ const validationHook = (result: any, c: any) => {
 }
 
 auth.post('/signup', zValidator('json', signupSchema, validationHook), async (c) => {
-  const { email, password, name } = c.req.valid('json')
+  const { email, password, name, role, adminSecret } = c.req.valid('json')
 
   try {
     const existingUser = await prisma.user.findUnique({
@@ -35,6 +35,13 @@ auth.post('/signup', zValidator('json', signupSchema, validationHook), async (c)
       return c.json({ error: 'User with this email already exists' }, 409)
     }
 
+    if (role === 'ADMIN') {
+      const configuredSecret = process.env.ADMIN_SECRET_KEY || 'admin_secret'
+      if (!adminSecret || adminSecret !== configuredSecret) {
+        return c.json({ error: 'Invalid or missing admin secret key' }, 403)
+      }
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const user = await prisma.user.create({
@@ -42,6 +49,7 @@ auth.post('/signup', zValidator('json', signupSchema, validationHook), async (c)
         email,
         password: hashedPassword,
         name: name || null,
+        role: role || 'USER',
       },
     })
 
@@ -53,6 +61,7 @@ auth.post('/signup', zValidator('json', signupSchema, validationHook), async (c)
     const token = await sign(
       {
         userId: user.id,
+        role: user.role,
         exp: Math.floor(Date.now() / 1000) + JWT_EXPIRY_SECONDS,
       },
       secret,
@@ -66,6 +75,7 @@ auth.post('/signup', zValidator('json', signupSchema, validationHook), async (c)
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.role,
       },
     }, 201)
   } catch (error) {
@@ -99,6 +109,7 @@ auth.post('/login', zValidator('json', loginSchema, validationHook), async (c) =
     const token = await sign(
       {
         userId: user.id,
+        role: user.role,
         exp: Math.floor(Date.now() / 1000) + JWT_EXPIRY_SECONDS,
       },
       secret,
@@ -112,6 +123,7 @@ auth.post('/login', zValidator('json', loginSchema, validationHook), async (c) =
         id: user.id,
         email: user.email,
         name: user.name,
+        role: user.role,
       },
     }, 200)
   } catch (error) {
@@ -130,6 +142,7 @@ auth.get('/me', authMiddleware, async (c) => {
         id: true,
         email: true,
         name: true,
+        role: true,
       },
     })
 

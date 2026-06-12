@@ -1,11 +1,16 @@
 import 'dotenv/config'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { serveStatic } from '@hono/node-server/serve-static'
 import authRouter from './routes/auth.js'
 import tasksRouter from './routes/tasks.js'
+import adminRouter from './routes/admin.js'
 import type { Env } from './types.js'
 
 const app = new Hono<Env>()
+
+// Serve static uploaded files
+app.use('/uploads/*', serveStatic({ root: './' }))
 
 app.use(
   '*',
@@ -34,6 +39,7 @@ app.get('/health', (c) => {
 
 app.route('/auth', authRouter)
 app.route('/tasks', tasksRouter)
+app.route('/admin', adminRouter)
 
 app.notFound((c) => {
   return c.json({ error: 'Not Found', message: `Route ${c.req.method} ${c.req.url} not found` }, 404)

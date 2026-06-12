@@ -17,6 +17,7 @@ export const authMiddleware = createMiddleware(async (c, next) => {
             return c.json({ error: 'Unauthorized: Invalid token payload' }, 401);
         }
         c.set('userId', payload.userId);
+        c.set('userRole', typeof payload.role === 'string' ? payload.role : 'USER');
         await next();
     }
     catch (error) {

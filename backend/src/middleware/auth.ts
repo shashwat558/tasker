@@ -23,6 +23,7 @@ export const authMiddleware = createMiddleware<Env>(async (c, next) => {
     }
 
     c.set('userId', payload.userId)
+    c.set('userRole', typeof payload.role === 'string' ? payload.role : 'USER')
     await next()
   } catch (error) {
     console.error('JWT verification failed:', error)
