@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 
-export default function SyncPage() {
+function SyncContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { login } = useAuth();
@@ -108,5 +108,24 @@ export default function SyncPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SyncPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-4 dark:bg-zinc-950">
+        <div className="w-full max-w-sm border-2 border-black bg-white p-8 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-zinc-900 dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] rounded-none">
+          <div className="flex flex-col items-center">
+            <Loader2 className="size-12 animate-spin text-black dark:text-white mb-4" />
+            <h1 className="text-xl font-bold uppercase tracking-widest text-black dark:text-white">
+              Loading...
+            </h1>
+          </div>
+        </div>
+      </div>
+    }>
+      <SyncContent />
+    </Suspense>
   );
 }
