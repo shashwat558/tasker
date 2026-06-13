@@ -212,8 +212,8 @@ export function AdminView({ onShowToast }: AdminViewProps) {
         </div>
       ) : (
         <motion.div variants={itemVariants} className="overflow-hidden rounded-none border-2 border-black bg-white shadow-[4px_4px_0px_0px_#000000] dark:border-white dark:bg-zinc-950 dark:shadow-[4px_4px_0px_0px_#ffffff]">
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left">
+          <div className="overflow-x-auto w-full">
+            <table className="w-full border-collapse text-left min-w-[800px]">
               <thead>
                 <tr className="border-b-2 border-black bg-neutral-50 text-[10px] font-black uppercase tracking-wider text-black dark:border-white dark:bg-zinc-900 dark:text-white">
                   <th className="px-6 py-4.5">User Identity</th>

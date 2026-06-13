@@ -440,7 +440,7 @@ export function TaskBoard() {
           </div>
         </header>
 
-        <main className="flex-1 p-4 md:p-8 flex flex-col max-w-[1440px] w-full mx-auto overflow-y-auto md:overflow-hidden">
+        <main className={`flex-1 p-4 md:p-8 flex flex-col max-w-[1440px] w-full mx-auto overflow-y-auto ${currentView === 'board' ? 'md:overflow-hidden' : ''}`}>
           {currentView === 'analytics' ? (
             <AnalyticsView tasks={tasks} totalCount={totalCount} />
           ) : (
