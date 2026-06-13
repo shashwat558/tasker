@@ -2,7 +2,8 @@
 
 A modern, full-stack, AI-powered Task Management application featuring a high-contrast Brutalist aesthetic. Built with React (Next.js), Hono, Prisma, and PostgreSQL.
 
-![Brutalist UI Concept](https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop) *(Placeholder)*
+![Brutalist UI Concept]<img width="1913" height="947" alt="image" src="https://github.com/user-attachments/assets/c46f59bb-91ef-49bf-924c-7216b5b86e51" />
+ *(Placeholder)*
 
 ## 🚀 Features
 
