@@ -127,4 +127,66 @@ auth.get('/me', authMiddleware, async (c) => {
         return c.json({ error: 'Internal Server Error' }, 500);
     }
 });
+const SYNC_TOKEN_EXPIRY = 60 * 5; // 5 minutes
+auth.post('/sync-token', authMiddleware, async (c) => {
+    const userId = c.get('userId');
+    const role = c.get('userRole');
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+        return c.json({ error: 'JWT configuration error' }, 500);
+    }
+    try {
+        const syncToken = await sign({
+            userId,
+            role,
+            isSyncToken: true,
+            exp: Math.floor(Date.now() / 1000) + SYNC_TOKEN_EXPIRY,
+        }, secret, 'HS256');
+        return c.json({ syncToken }, 200);
+    }
+    catch (error) {
+        console.error('Sync token generation error:', error);
+        return c.json({ error: 'Internal Server Error' }, 500);
+    }
+});
+import { verify } from 'hono/jwt';
+auth.post('/sync-login', async (c) => {
+    try {
+        const { token } = await c.req.json();
+        if (!token)
+            return c.json({ error: 'Token missing' }, 400);
+        const secret = process.env.JWT_SECRET;
+        if (!secret)
+            return c.json({ error: 'JWT config error' }, 500);
+        const payload = await verify(token, secret, 'HS256');
+        if (!payload.isSyncToken) {
+            return c.json({ error: 'Invalid token type' }, 401);
+        }
+        const user = await prisma.user.findUnique({
+            where: { id: payload.userId },
+        });
+        if (!user)
+            return c.json({ error: 'User not found' }, 404);
+        // Generate standard long-lived login token
+        const loginToken = await sign({
+            userId: user.id,
+            role: user.role,
+            exp: Math.floor(Date.now() / 1000) + JWT_EXPIRY_SECONDS,
+        }, secret, 'HS256');
+        return c.json({
+            message: 'Sync login successful',
+            token: loginToken,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role,
+            },
+        }, 200);
+    }
+    catch (error) {
+        console.error('Sync login error:', error);
+        return c.json({ error: 'Invalid or expired sync token' }, 401);
+    }
+});
 export default auth;

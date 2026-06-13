@@ -135,6 +135,87 @@ describe('Task Management API Integration Tests', () => {
         });
         expect(checkRes.status).toBe(404);
     });
+    describe('Task Attachments', () => {
+        let attachmentTaskId = '';
+        it('should create a task to attach files to', async () => {
+            const res = await app.request('/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({
+                    title: 'Attachment Test Task',
+                    description: 'Testing file attachments',
+                    status: 'TODO',
+                    priority: 'LOW',
+                }),
+            });
+            expect(res.status).toBe(201);
+            const data = await res.json();
+            attachmentTaskId = data.id;
+        });
+        it('should upload a file attachment successfully', async () => {
+            const formData = new FormData();
+            const file = new File(['dummy content'], 'dummy.txt', { type: 'text/plain' });
+            formData.append('file', file);
+            const res = await app.request(`/tasks/${attachmentTaskId}/attachments`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: formData,
+            });
+            expect(res.status).toBe(201);
+            const data = await res.json();
+            expect(data.filename).toBe('dummy.txt');
+            expect(data.mimeType).toBe('text/plain');
+            expect(data.taskId).toBe(attachmentTaskId);
+            expect(data.filePath).toContain('/uploads/');
+        });
+        it('should include attachments when fetching the task', async () => {
+            const res = await app.request(`/tasks`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+            expect(res.status).toBe(200);
+            const data = await res.json();
+            const task = data.tasks.find((t) => t.id === attachmentTaskId);
+            expect(task).toBeDefined();
+            expect(task.attachments).toBeInstanceOf(Array);
+            expect(task.attachments.length).toBe(1);
+            expect(task.attachments[0].filename).toBe('dummy.txt');
+        });
+        it('should delete the attachment successfully', async () => {
+            const getRes = await app.request(`/tasks`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+            const getData = await getRes.json();
+            const task = getData.tasks.find((t) => t.id === attachmentTaskId);
+            const attachmentId = task.attachments[0].id;
+            const delRes = await app.request(`/tasks/${attachmentTaskId}/attachments/${attachmentId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+            expect(delRes.status).toBe(200);
+            const verifyRes = await app.request(`/tasks`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+            const verifyData = await verifyRes.json();
+            const verifiedTask = verifyData.tasks.find((t) => t.id === attachmentTaskId);
+            expect(verifiedTask.attachments.length).toBe(0);
+        });
+    });
     describe('Admin Role Access Control', () => {
         const userEmail = `user-${Date.now()}@example.com`;
         const adminEmail = `admin-${Date.now()}@example.com`;
