@@ -8,6 +8,7 @@ import { TaskStatus, TaskPriority, Prisma } from '@prisma/client'
 import { promises as fs } from 'fs'
 import { join } from 'path'
 import crypto from 'crypto'
+import Groq from 'groq-sdk'
 
 const tasks = new Hono<Env>()
 
@@ -48,6 +49,81 @@ tasks.post('/', zValidator('json', createTaskSchema, validationHook), async (c) 
   } catch (error) {
     console.error('Create task error:', error)
     return c.json({ error: 'Internal Server Error' }, 500)
+  }
+})
+
+tasks.post('/magic', async (c) => {
+  const userId = c.get('userId')
+  const body = await c.req.json().catch(() => ({}))
+  const text = body.text
+
+  if (!text) {
+    return c.json({ error: 'Text is required' }, 400)
+  }
+
+  const groqApiKey = process.env.GROQ_API_KEY
+  if (!groqApiKey) {
+    return c.json({ error: 'GROQ_API_KEY is not configured in the server' }, 500)
+  }
+
+  try {
+    const groq = new Groq({ apiKey: groqApiKey })
+
+    const prompt = `
+      You are an AI task assistant. Analyze the following text and break it down into a list of actionable tasks.
+      Return the result strictly as a JSON array of objects. Do not include markdown formatting or backticks around the JSON.
+      Each object must have:
+      - title: string (short, actionable)
+      - description: string (more details)
+      - priority: "LOW", "MEDIUM", or "HIGH"
+      - status: "TODO", "IN_PROGRESS", or "COMPLETED"
+      - dueDate: ISO string date (only if explicitly mentioned, otherwise null)
+
+      Text to analyze:
+      """
+      ${text}
+      """
+    `
+
+    const completion = await groq.chat.completions.create({
+      messages: [
+        { role: 'system', content: 'You are an AI that strictly outputs raw JSON arrays of tasks without markdown block wrappers or conversational text.' },
+        { role: 'user', content: prompt }
+      ],
+      model: 'llama-3.3-70b-versatile',
+      temperature: 0.1,
+    })
+
+    const rawContent = completion.choices[0]?.message?.content || '[]'
+
+    // Strip markdown formatting if the model still outputs it
+    const cleanedContent = rawContent.replace(/```json/i, '').replace(/```/g, '').trim()
+    const parsedTasks = JSON.parse(cleanedContent)
+
+    if (!Array.isArray(parsedTasks)) {
+      throw new Error('AI did not return an array')
+    }
+
+    const createdTasks = []
+    for (const task of parsedTasks) {
+      const created = await prisma.task.create({
+        data: {
+          title: task.title || 'Untitled Task',
+          description: task.description || '',
+          priority: ['LOW', 'MEDIUM', 'HIGH'].includes(task.priority) ? task.priority : 'MEDIUM',
+          status: ['TODO', 'IN_PROGRESS', 'COMPLETED'].includes(task.status) ? task.status : 'TODO',
+          dueDate: task.dueDate ? new Date(task.dueDate) : null,
+          userId,
+        },
+        include: { attachments: true, user: { select: { id: true, email: true, name: true } } }
+      })
+      createdTasks.push(created)
+    }
+
+    return c.json({ tasks: createdTasks }, 201)
+  } catch (error) {
+    console.error('Magic task error:', error)
+    return c.json({ error: 'Failed to process magic tasks' }, 500)
   }
 })
 
