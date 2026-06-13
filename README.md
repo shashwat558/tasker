@@ -5,26 +5,16 @@ A modern, full-stack, AI-powered Task Management application featuring a high-co
 ![Brutalist UI Concept]<img width="1913" height="947" alt="image" src="https://github.com/user-attachments/assets/c46f59bb-91ef-49bf-924c-7216b5b86e51" />
  *(Placeholder)*
 
-## 🚀 Features
+## 🚀 Core Features
 
-### 🎨 High-End Brutalist UI/UX
-- **Design System:** Strict monochrome palette, rigid 2px solid borders, and sharp pixel drop-shadows. No rounded corners.
-- **Fluid Animations:** Butter-smooth drag-and-drop, layout transitions, and micro-interactions powered by Framer Motion.
-- **Responsive Views:** Seamlessly toggle between Kanban board, List, and Table views. Perfectly responsive on both desktop and mobile.
-
-### 🧠 AI-Powered "Magic" Tasks
-- **Meeting Notes to Tasks:** Paste unstructured meeting notes, and our AI (powered by **Groq** and `llama-3.3-70b-versatile`) will intelligently parse them and automatically generate structured, actionable tasks.
-
-### 🎙 Voice Commands
-- **Hands-Free Control:** Built-in speech recognition allows you to simply say "Add task buy groceries", "Complete task...", or "Delete task..." to manage your workspace without touching your keyboard.
-
-### 🛠 Core Capabilities
-- **Authentication:** Secure JWT-based login and registration.
-- **Role-Based Access Control:** Separate standard user and Admin dashboards.
-- **Attachments:** Upload and manage file attachments directly on tasks.
-- **Real-Time Filtering & Sorting:** Instantly sort by due date, priority, or creation date.
-- **Dark Mode:** First-class dark and light theme support with persistent local storage.
-
+- **🎨 High-End Brutalist UI/UX:** Strict monochrome palette, rigid 2px solid borders, and sharp pixel drop-shadows with butter-smooth Framer Motion animations.
+- **📱 Responsive Layout:** Seamlessly toggle between Kanban board, List, and Table views on desktop, with a unified scrolling experience on mobile.
+- **🛡 Role-Based Access Control:** Secure JWT authentication with dedicated dashboards for standard users and a System Admin directory for user management.
+- **📎 Task Attachments:** Upload, view, and manage file attachments directly inside your task cards.
+- **⚡ Real-Time Filtering & Sorting:** Instantly organize your workflow by due date, priority, or creation date.
+- **🌗 First-Class Dark Mode:** Full light and dark theme support with persistent local storage.
+- **🧠 AI-Powered "Magic" Tasks:** Paste unstructured meeting notes, and the integrated AI (powered by **Groq** and `llama-3.3-70b-versatile`) will automatically parse and generate actionable tasks.
+- **🎙 Hands-Free Voice Commands:** Built-in speech recognition lets you say "Add task buy groceries" or "Complete task update timeline" to manage your workspace purely with your voice.
 ---
 
 ## 💻 Technology Stack

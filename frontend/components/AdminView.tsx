@@ -133,14 +133,39 @@ export function AdminView({ onShowToast }: AdminViewProps) {
           </p>
         </div>
 
-        {/* Total stats */}
-        <div className="flex items-center gap-2.5 rounded-none border-2 border-black bg-white px-4.5 py-3 shadow-[4px_4px_0px_0px_#000000] dark:border-white dark:bg-zinc-950 dark:shadow-[4px_4px_0px_0px_#ffffff]">
-          <div className="flex size-9 items-center justify-center rounded-none border border-black bg-neutral-50 text-black dark:border-white dark:bg-zinc-900 dark:text-white">
-            <Users className="size-4.5" />
+        {/* Stats Container */}
+        <div className="flex flex-wrap items-center gap-4">
+          {/* Total Users */}
+          <div className="flex items-center gap-2.5 rounded-none border-2 border-black bg-white px-4 py-2 sm:px-4.5 sm:py-3 shadow-[4px_4px_0px_0px_#000000] dark:border-white dark:bg-zinc-950 dark:shadow-[4px_4px_0px_0px_#ffffff]">
+            <div className="flex size-8 sm:size-9 items-center justify-center rounded-none border border-black bg-neutral-50 text-black dark:border-white dark:bg-zinc-900 dark:text-white">
+              <Users className="size-4 sm:size-4.5" />
+            </div>
+            <div>
+              <span className="block text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-neutral-500 dark:text-zinc-400">Total Users</span>
+              <span className="text-sm font-black text-black dark:text-white mt-0.5 block uppercase tracking-wider">{users.length} registered</span>
+            </div>
           </div>
-          <div>
-            <span className="block text-[10px] font-black uppercase tracking-wider text-neutral-450 dark:text-zinc-400">Total Users</span>
-            <span className="text-sm font-black text-black dark:text-white mt-0.5 block uppercase tracking-wider">{users.length} registered</span>
+
+          {/* Total Admins */}
+          <div className="flex items-center gap-2.5 rounded-none border-2 border-black bg-white px-4 py-2 sm:px-4.5 sm:py-3 shadow-[4px_4px_0px_0px_#000000] dark:border-white dark:bg-zinc-950 dark:shadow-[4px_4px_0px_0px_#ffffff]">
+            <div className="flex size-8 sm:size-9 items-center justify-center rounded-none border border-black bg-neutral-50 text-black dark:border-white dark:bg-zinc-900 dark:text-white">
+              <Shield className="size-4 sm:size-4.5" />
+            </div>
+            <div>
+              <span className="block text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-neutral-500 dark:text-zinc-400">System Admins</span>
+              <span className="text-sm font-black text-black dark:text-white mt-0.5 block uppercase tracking-wider">{users.filter(u => u.role === 'ADMIN').length} admins</span>
+            </div>
+          </div>
+
+          {/* Total Tasks */}
+          <div className="flex items-center gap-2.5 rounded-none border-2 border-black bg-white px-4 py-2 sm:px-4.5 sm:py-3 shadow-[4px_4px_0px_0px_#000000] dark:border-white dark:bg-zinc-950 dark:shadow-[4px_4px_0px_0px_#ffffff]">
+            <div className="flex size-8 sm:size-9 items-center justify-center rounded-none border border-black bg-neutral-50 text-black dark:border-white dark:bg-zinc-900 dark:text-white">
+              <FolderKanban className="size-4 sm:size-4.5" />
+            </div>
+            <div>
+              <span className="block text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-neutral-500 dark:text-zinc-400">Total Tasks</span>
+              <span className="text-sm font-black text-black dark:text-white mt-0.5 block uppercase tracking-wider">{users.reduce((acc, u) => acc + (u._count?.tasks || 0), 0)} tasks</span>
+            </div>
           </div>
         </div>
       </motion.div>
@@ -207,15 +232,15 @@ export function AdminView({ onShowToast }: AdminViewProps) {
                     {/* User Identity */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex size-9 items-center justify-center rounded-none border border-black bg-white text-black dark:border-white dark:bg-zinc-950 dark:text-white font-black uppercase">
+                        <div className="flex size-9 shrink-0 items-center justify-center rounded-none border border-black bg-neutral-100 text-black dark:border-white dark:bg-zinc-800 dark:text-white font-black uppercase shadow-[2px_2px_0px_0px_#000000] dark:shadow-[2px_2px_0px_0px_#ffffff]">
                           {user.name ? user.name.charAt(0) : user.email.charAt(0)}
                         </div>
                         <div className="space-y-0.5">
-                          <span className="font-bold text-slate-800 dark:text-zinc-150 block">
+                          <span className="font-bold text-black dark:text-white block">
                             {user.name || 'Anonymous User'}
                           </span>
-                          <span className="text-[10px] font-semibold text-neutral-450 dark:text-zinc-400 flex items-center gap-1">
-                            <Mail className="size-3 text-neutral-400" />
+                          <span className="text-[10px] font-semibold text-neutral-500 dark:text-zinc-400 flex items-center gap-1">
+                            <Mail className="size-3 text-neutral-400 dark:text-zinc-500" />
                             {user.email}
                           </span>
                         </div>
@@ -225,12 +250,12 @@ export function AdminView({ onShowToast }: AdminViewProps) {
                     {/* Role Badge */}
                     <td className="px-6 py-4">
                       {user.role === 'ADMIN' ? (
-                        <span className="inline-flex items-center gap-1 rounded-none border border-black bg-white px-2 py-1 text-[9px] font-black uppercase tracking-wider text-black dark:border-white dark:bg-zinc-950 dark:text-white">
+                        <span className="inline-flex items-center gap-1.5 rounded-none border-2 border-black bg-black px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-white dark:border-white dark:bg-white dark:text-black">
                           <Shield className="size-3" />
                           System Admin
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 rounded-none border border-black bg-white px-2 py-1 text-[9px] font-black uppercase tracking-wider text-black dark:border-white dark:bg-zinc-950 dark:text-white">
+                        <span className="inline-flex items-center gap-1.5 rounded-none border border-black bg-white px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-black dark:border-white dark:bg-zinc-950 dark:text-white shadow-[1px_1px_0px_0px_#000000] dark:shadow-[1px_1px_0px_0px_#ffffff]">
                           Standard User
                         </span>
                       )}
@@ -238,14 +263,14 @@ export function AdminView({ onShowToast }: AdminViewProps) {
 
                     {/* Task Count */}
                     <td className="px-6 py-4 text-center">
-                      <div className="inline-flex items-center gap-1 text-[11px] font-black text-black dark:text-white">
+                      <div className="inline-flex items-center justify-center gap-1.5 rounded-none border border-black bg-neutral-50 px-3 py-1 text-[11px] font-black text-black dark:border-white dark:bg-zinc-900 dark:text-white shadow-[1px_1px_0px_0px_#000000] dark:shadow-[1px_1px_0px_0px_#ffffff]">
                         <FolderKanban className="size-3.5" />
                         <span>{user._count?.tasks || 0}</span>
                       </div>
                     </td>
 
                     {/* Joined Date */}
-                    <td className="px-6 py-4 text-neutral-550 dark:text-zinc-400 font-bold uppercase tracking-wider">
+                    <td className="px-6 py-4 text-neutral-600 dark:text-zinc-300 font-bold uppercase tracking-wider">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="size-3.5 text-black dark:text-white" />
                         <span>{new Date(user.createdAt).toLocaleDateString(undefined, {

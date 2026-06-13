@@ -23,7 +23,7 @@ export default function Home() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50/50 dark:bg-zinc-950">
         <div className="flex flex-col items-center gap-2">
-          <div className="size-8 animate-spin rounded-none border-2 border-black border-t-transparent dark:border-white" />
+          <div className="size-8 animate-spin rounded-full border-2 border-black border-t-transparent dark:border-white dark:border-t-transparent" />
           <span className="text-xs font-semibold tracking-wider text-slate-400 uppercase animate-pulse">
             Loading your workspace...
           </span>
