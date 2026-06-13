@@ -80,8 +80,8 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="flex min-h-screen bg-neutral-50 text-black dark:bg-zinc-950 dark:text-white transition-colors duration-200">
-      {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-20 flex w-66 flex-col border-r-2 border-black bg-white p-6 dark:border-white dark:bg-zinc-950 shadow-[2px_0px_0px_0px_#000000] dark:shadow-[2px_0px_0px_0px_#ffffff]">
+      {/* Sidebar (Hidden on Mobile) */}
+      <aside className="hidden md:flex fixed inset-y-0 left-0 z-20 w-66 flex-col border-r-2 border-black bg-white p-6 dark:border-white dark:bg-zinc-950 shadow-[2px_0px_0px_0px_#000000] dark:shadow-[2px_0px_0px_0px_#ffffff]">
         <div className="flex items-center gap-2.5 px-3 mb-8">
           <div className="flex size-9 items-center justify-center rounded-none border border-black bg-black text-white dark:border-white dark:bg-white dark:text-black">
             <Shield className="size-4.5" />
@@ -145,8 +145,8 @@ export default function AdminDashboardPage() {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex flex-1 flex-col pl-66">
-        <header className="sticky top-0 z-30 flex h-18 items-center justify-between border-b-2 border-black bg-white px-8 dark:border-white dark:bg-zinc-950">
+      <div className="flex flex-1 flex-col md:pl-66 min-w-0 overflow-x-hidden">
+        <header className="sticky top-0 z-30 flex h-18 items-center justify-between border-b-2 border-black bg-white px-4 md:px-8 dark:border-white dark:bg-zinc-950">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-black text-black dark:text-white uppercase tracking-wider">
               Users Directory
@@ -167,10 +167,19 @@ export default function AdminDashboardPage() {
             >
               {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
             </button>
+
+            {/* Mobile Logout (Visible only on mobile) */}
+            <button 
+              onClick={logout}
+              title="Log out"
+              className="md:hidden rounded-none border border-black p-2 bg-white text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:bg-zinc-950 dark:hover:bg-white dark:hover:text-black transition-colors"
+            >
+              <LogOut className="size-4" />
+            </button>
           </div>
         </header>
 
-        <main className="flex-1 p-8 space-y-6 max-w-[1440px] w-full mx-auto">
+        <main className="flex-1 p-4 md:p-8 space-y-6 max-w-[1440px] w-full mx-auto">
           <AdminView onShowToast={showToast} />
         </main>
       </div>

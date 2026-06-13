@@ -98,7 +98,7 @@ export default function UserDetailPage() {
           <p className="text-xs text-neutral-500 dark:text-zinc-400 mb-6 uppercase tracking-wider">{error || 'User details could not be loaded.'}</p>
           <button
             onClick={() => router.push('/admin')}
-            className="inline-flex items-center gap-2 px-4.5 py-2.5 border-2 border-black bg-white text-black rounded-none text-xs font-black hover:bg-black hover:text-white dark:border-white dark:bg-zinc-955 dark:text-white dark:hover:bg-white dark:hover:text-black transition uppercase tracking-wider shadow-[3px_3px_0px_0px_#000000] dark:shadow-[3px_3px_0px_0px_#ffffff]"
+            className="inline-flex items-center gap-2 px-4.5 py-2.5 border-2 border-black bg-white text-black rounded-none text-xs font-black hover:bg-black hover:text-white dark:border-white dark:bg-zinc-950 dark:text-white dark:hover:bg-white dark:hover:text-black transition uppercase tracking-wider shadow-[3px_3px_0px_0px_#000000] dark:shadow-[3px_3px_0px_0px_#ffffff]"
           >
             <ArrowLeft className="size-4" />
             Back to Users Directory
@@ -129,7 +129,7 @@ export default function UserDetailPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={toggleTheme}
-            className="rounded-none border border-black p-2 bg-white text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:bg-zinc-955 dark:hover:bg-white dark:hover:text-black transition-colors"
+            className="rounded-none border border-black p-2 bg-white text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:bg-zinc-950 dark:hover:bg-white dark:hover:text-black transition-colors"
           >
             {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
           </button>
@@ -144,7 +144,7 @@ export default function UserDetailPage() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="bg-white dark:bg-zinc-955 border-2 border-black dark:border-white rounded-none p-6.5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff] flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+          className="bg-white dark:bg-zinc-950 border-2 border-black dark:border-white rounded-none p-6.5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff] flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
         >
           <div className="flex items-center gap-4.5">
             <div className="flex size-15 items-center justify-center rounded-none border-2 border-black bg-black text-white dark:border-white dark:bg-white dark:text-black font-black text-2xl">
@@ -184,7 +184,7 @@ export default function UserDetailPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="bg-white dark:bg-zinc-955 border-2 border-black dark:border-white rounded-none p-5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff] flex items-center justify-between"
+            className="bg-white dark:bg-zinc-950 border-2 border-black dark:border-white rounded-none p-5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff] flex items-center justify-between"
           >
             <div className="space-y-1">
               <span className="text-xs font-black text-neutral-500 dark:text-zinc-400 uppercase tracking-wider">Total Todos</span>
@@ -199,7 +199,7 @@ export default function UserDetailPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.15 }}
-            className="bg-white dark:bg-zinc-955 border-2 border-black dark:border-white rounded-none p-5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff] flex items-center justify-between"
+            className="bg-white dark:bg-zinc-950 border-2 border-black dark:border-white rounded-none p-5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff] flex items-center justify-between"
           >
             <div className="space-y-1">
               <span className="text-xs font-black text-neutral-500 dark:text-zinc-400 uppercase tracking-wider">Completed</span>
@@ -214,7 +214,7 @@ export default function UserDetailPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="bg-white dark:bg-zinc-955 border-2 border-black dark:border-white rounded-none p-5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff] flex items-center justify-between"
+            className="bg-white dark:bg-zinc-950 border-2 border-black dark:border-white rounded-none p-5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff] flex items-center justify-between"
           >
             <div className="space-y-1">
               <span className="text-xs font-black text-neutral-500 dark:text-zinc-400 uppercase tracking-wider">Pending</span>
@@ -243,11 +243,11 @@ export default function UserDetailPage() {
             </div>
 
             {tasks.length === 0 ? (
-              <div className="bg-white dark:bg-zinc-955 border-2 border-black dark:border-white rounded-none p-12 text-center text-neutral-500 dark:text-zinc-400 font-bold text-xs uppercase tracking-wider">
+              <div className="bg-white dark:bg-zinc-950 border-2 border-black dark:border-white rounded-none p-12 text-center text-neutral-500 dark:text-zinc-400 font-bold text-xs uppercase tracking-wider">
                 No tasks created by this user yet.
               </div>
             ) : (
-              <div className="overflow-hidden bg-white dark:bg-zinc-955 border-2 border-black dark:border-white rounded-none shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff]">
+              <div className="overflow-hidden bg-white dark:bg-zinc-950 border-2 border-black dark:border-white rounded-none shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff]">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse text-xs">
                     <thead>
@@ -299,7 +299,7 @@ export default function UserDetailPage() {
               Recent Activity
             </h3>
 
-            <div className="bg-white dark:bg-zinc-955 border-2 border-black dark:border-white rounded-none p-5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff]">
+            <div className="bg-white dark:bg-zinc-950 border-2 border-black dark:border-white rounded-none p-5 shadow-[4px_4px_0px_0px_#000000] dark:shadow-[4px_4px_0px_0px_#ffffff]">
               {recentActivity.length === 0 ? (
                 <div className="text-center text-neutral-500 py-6 text-xs font-black uppercase tracking-wider">
                   No activity found.
